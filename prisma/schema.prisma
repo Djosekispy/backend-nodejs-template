@@ -1,0 +1,183 @@
+generator client {
+  provider        = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id                Int    @id @default(autoincrement())
+  nome_completo     String
+  data_nascimento   DateTime?  
+  email             String    @unique
+  telefone          String?    @unique
+  endereco          String?
+  senha             String
+  foto_perfil       String?   @db.Text
+  tipo_perfil       TipoPerfil @default(cliente)
+  sexo              String?
+  estado_civil      String?
+  token_acesso      String?
+  codigo_recuperacao Int?
+  numero_bilhete    String?    @unique
+  documentos        Documento[]
+  sorteios          Sorteio[] @relation("OrganizadorSorteios")
+  inscricoes        Inscricao[]
+  reclamacoes       Reclamacao[]
+  pedidos           Pedido[]
+  notificacoes      Notificacao[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+model Inscricao {
+  id                 Int     @id @default(autoincrement())
+  usuarioId          Int
+  itemId             Int
+  estado_candidatura EstadoCandidatura @default(pendente)
+  usuario            Usuario   @relation(fields: [usuarioId], references: [id])
+  item               Item      @relation(fields: [itemId], references: [id])
+
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
+
+model Documento {
+  id                Int    @id @default(autoincrement())
+  bilheteUrl        String  @db.Text
+  nif               String  @db.Text
+  licenca           String  @db.Text
+  estado            EstadoDocumento @default(pendente)
+  usuarioId         Int
+  usuario           Usuario   @relation(fields: [usuarioId], references: [id])
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+model Administrador {
+  id          Int   @id @default(autoincrement())
+  nome        String
+  email       String   @unique
+  senha       String
+  telefone    String
+  token_acesso String?
+  codigo_recuperacao Int?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Pedido {
+  id          Int   @id @default(autoincrement())
+  usuarioId     Int
+  content       String   @unique
+  usuario       Usuario   @relation(fields: [usuarioId], references: [id])
+  estado        StatusPedido? @default(pendente)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Reclamacao {
+  id            Int    @id @default(autoincrement())
+  titulo        String
+  conteudo      String
+  usuarioId     Int
+  sorteioId     Int
+  usuario       Usuario   @relation(fields: [usuarioId], references: [id])
+  sorteio       Sorteio   @relation(fields: [sorteioId], references: [id])
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Sorteio {
+  id              Int     @id @default(autoincrement())
+  nome            String
+  data_realizacao DateTime
+  cover           String? @db.Text
+  status          StatusSorteio @default(corrente)
+  organizadorId   Int
+  organizador     Usuario      @relation(fields: [organizadorId], references: [id], name: "OrganizadorSorteios")
+  politicas       String
+  categorias      Categoria[]
+  reclamacoes     Reclamacao[] 
+
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model Item {
+  id              Int     @id @default(autoincrement())
+  nome            String
+  propriedades    Json
+  descricao       String
+  categoriaId     Int
+  categoria       Categoria  @relation(fields: [categoriaId], references: [id])
+  inscricoes      Inscricao[]
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+model Notificacao {
+  id              Int     @id @default(autoincrement())
+  message         String
+  title           String
+  status          EstadoNotificacao  @default(pendente)
+  usuarioId          Int
+  usuario       Usuario  @relation(fields: [usuarioId], references: [id])
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+
+model Categoria {
+  id              Int     @id @default(autoincrement())
+  nome            String
+  descricao       String
+  sorteioId       Int
+  sorteio         Sorteio    @relation(fields: [sorteioId], references: [id])
+  itens           Item[]
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+enum EstadoCandidatura {
+  aprovado
+  recusado
+  ganho
+  pendente
+}
+
+enum EstadoDocumento {
+  verificado
+  pendente
+}
+
+
+enum EstadoNotificacao {
+  lido
+  pendente
+}
+
+enum TipoPerfil {
+  cliente
+  sorteador
+}
+
+enum StatusPedido {
+    aceite
+    rejeitado
+    pendente
+}
+
+enum StatusSorteio {
+  corrente
+  cancelado
+  finalizado
+}
