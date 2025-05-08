@@ -1,5 +1,5 @@
 
-import { API_KEY, APP_ID, AUTH_DOMAIN, MEASUREMENT_ID, MESSAGEIN_SENDER_ID, PROJECT_ID, STORAGE_BUCKET } from "./variables.env";
+import { API_KEY, APP_ID, AUTH_DOMAIN, MEASUREMENT_ID, MESSAGEIN_SENDER_ID, PROJECT_ID, STORAGE_BUCKET } from "./env";
 
 export const firebaseConfig = {
   apiKey: API_KEY,
