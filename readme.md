@@ -1,138 +1,135 @@
-# Sorteios API
+# 🧰 Node.js Backend Template
 
-Bem-vindo à documentação do sistema de sorteios! Este projeto é um sistema completo para criar e gerenciar sorteios de forma segura e eficiente, oferecendo funcionalidades para diferentes perfis de usuários: administradores, entidades e participantes. Este repositório está aberto à colaboração de desenvolvedores para expandir suas funcionalidades. Contribua e ajude-nos a melhorar!
+Este é um template profissional e genérico para desenvolvimento de APIs backend utilizando **Node.js** com suporte para **Prisma** e **TypeORM**, arquitetura **MVC + Clean Code**, pronto para deploy na **Vercel** e integração com serviços como **Firebase**, **Email**, e **Upload local**.
 
-## Visão Geral do Sistema
-Este sistema foi projetado para permitir que entidades criem sorteios e que usuários participem deles de forma justa, com funcionalidades robustas para segurança, relatórios e notificações automáticas.
-
-### Principais Características
-1. **Cadastro e autenticação segura de usuários**.
-2. **Gerenciamento de perfis**: diferentes permissões para participantes, entidades e administradores.
-3. **Criação e gestão de sorteios**: inclusão de itens, categorias e políticas de participação.
-4. **Participação controlada**: cada participante pode concorrer a um único item por sorteio.
-5. **Condução de sorteios e notificações automáticas aos vencedores**.
-6. **Histórico e relatórios em PDF**.
-7. **Sistema de reclamações**: com gerenciamento por administradores.
-8. **Segurança aprimorada**: criptografia de senhas, validação de documentos e controle de acesso.
+> Desenvolvido para acelerar o início de projetos com boas práticas, padronização e extensibilidade.
 
 ---
 
-## Tecnologias Utilizadas
-- **Node.js** com Express.js para o backend.
-- **MySQL** como banco de dados.
-- **JWT** para autenticação e segurança.
-- **Bibliotecas auxiliares**: bcrypt para criptografia de senhas, nodemailer para envio de emails e cron para agendamento de tarefas.
-- **Gerador de PDFs**: para relatórios e listas de vencedores.
-- **TypeScript**: para tipagem e manutenção do código.
+## 🚀 Tecnologias Utilizadas
+
+- **Node.js**
+- **Express**
+- **Prisma ORM** ou **TypeORM** (alternáveis)
+- **TypeScript**
+- **EJS** (template engine para emails e respostas visuais)
+- **Firebase** (upload)
+- **Multer** (upload local)
+- **Nodemailer** (envio de email)
+- **Vercel** (deploy)
 
 ---
 
-## Instalação e Configuração
-### Passo 1: Clonar o Repositório
+## ⚙️ Configuração
+
+### 1. Clone o repositório
+
 ```bash
-git clone https://github.com/seu-usuario/sorteios-api.git
-cd sorteios-api
-```
+git clone https://github.com/Djosekispy/backend-nodejs-template.git
+cd backend-nodejs-template
+````
 
-### Passo 2: Instalar Dependências
+### 2. Instale as dependências
+
 ```bash
 npm install
 ```
 
-### Passo 3: Configurar Variáveis de Ambiente
-Crie um arquivo `.env` com as seguintes variáveis:
+### 3. Configure as variáveis de ambiente
+
+Crie um arquivo `.env` baseado no exemplo abaixo:
+
 ```env
-DATABASE_URL=
-PORT=
-MAIL_MAILER=
-MAIL_HOST=
-MAIL_PORT=
-MAIL_USERNAME=
-MAIL_PASSWORD=
-MAIL_ENCRYPTION=
-MAIL_FROM_ADDRESS=
-MAIL_FROM_NAME=
-JWT_SECRET= 
-API_KEY=
-AUTH_DOMAIN=
-PROJECT_ID=
-STORAGE_BUCKET=
-MESSAGEIN_SENDER_ID=
-APP_ID=
-MEASUREMENT_ID=
-
+SERVER_PORT=3000
+DATABASE_URL=mysql://usuario:senha@host:porta/banco
+EMAIL_USER=seu@email.com
+EMAIL_PASS=sua_senha
+FIREBASE_BUCKET_URL=sua_url
+# etc...
 ```
 
-### Passo 4: Migrar o Banco de Dados
-Execute as migrações para configurar o banco de dados:
+### 4. Configure o ORM
+
+Escolha **Prisma** ou **TypeORM** (os dois estão preparados):
+
+* **Prisma**:
+
+  ```bash
+  npx prisma generate
+  npx prisma migrate dev --name init
+  ```
+
+* **TypeORM**: configure o arquivo `data-source.ts` conforme desejado.
+
+### 5. Execute o servidor
+
 ```bash
-npm run vercel-build
-```
-
-### Passo 5: Iniciar o Servidor
-```bash
-npm start
-```
-A API estará disponível em `http://localhost:3000`.
-
----
-
-
-## Exemplos de Uso
-### 1. Registro de Novo Usuário
-**Requisição:**
-```json
-{
-  "name": "João Silva",
-  "email": "joao@email.com",
-  "password": "senhaSegura123"
-}
-```
-**Resposta:**
-```json
-{
-  "message": "Usuário registrado com sucesso!"
-}
-```
-
-### 2. Criação de Sorteio
-**Requisição:**
-```json
-{
-  "name": "Sorteio de Natal",
-  "date": "2024-12-25",
-  "policy": "Um item por participante"
-}
-```
-**Resposta:**
-```json
-{
-  "message": "Sorteio criado com sucesso!",
-  "raffleId": "12345"
-}
-```
-
-### 3. Participação em Sorteio
-**Requisição:**
-```json
-{
-  "raffleId": "12345",
-  "itemId": "67890"
-}
-```
-**Resposta:**
-```json
-{
-  "message": "Inscrição realizada com sucesso!"
-}
+npm run dev
 ```
 
 ---
 
-## Contribuição
-Contribuições são bem-vindas! Aqui estão algumas maneiras de ajudar:
-1. **Relatar bugs**: Abra uma issue descrevendo o problema encontrado.
-2. **Adicionar funcionalidades**: Proponha melhorias através de pull requests.
-3. **Melhorar a documentação**: Sugerir ajustes ou exemplos mais claros.
+## 📦 Funcionalidades Inclusas
 
-Siga as boas práticas de desenvolvimento e garanta que seus commits sejam descritivos e organizados.
+* ✅ Estrutura MVC + Clean Code
+* ✅ Configuração pronta para Prisma e TypeORM
+* ✅ Middleware de CORS, erros, validação e logger
+* ✅ BaseService e BaseRepository (para herança em novos módulos)
+* ✅ Upload de arquivos (Firebase ou local)
+* ✅ Sistema de envio de e-mails com templates
+* ✅ Padronização de mensagens de sucesso/erro
+* ✅ Deploy automático via Vercel (`vercel.json` incluso)
+* ✅ Templates EJS para email e respostas personalizadas
+
+---
+
+## 📤 Deploy na Vercel
+
+Este projeto já possui tudo que precisa para ser executado na Vercel:
+
+1. Crie uma conta em [vercel.com](https://vercel.com).
+2. Vincule este repositório ao seu projeto.
+3. Adicione as variáveis de ambiente na aba “Environment Variables”.
+4. O deploy será feito automaticamente a cada `push`.
+
+---
+
+## 📩 Estrutura de Template de Email
+
+Arquivos `.ejs` estão localizados na pasta `/templates`. Eles podem ser renderizados com dados dinâmicos.
+
+---
+
+## 🧪 Testes
+
+Você pode configurar testes usando qualquer framework, como Jest ou Mocha, e criar os testes dentro de `src/__tests__` ou `tests/`.
+
+---
+
+## 🤝 Contribuições
+
+Contribuições são bem-vindas! Para isso:
+
+1. Fork este repositório
+2. Crie uma branch com sua feature (`git checkout -b minha-feature`)
+3. Commit suas alterações (`git commit -m 'feat: minha nova feature'`)
+4. Push para a branch (`git push origin minha-feature`)
+5. Abra um Pull Request
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença **MIT**.
+
+---
+
+## 👨‍💻 Autor
+
+**Djosekispy**
+[GitHub](https://github.com/Djosekispy) • [LinkedIn](https://linkedin.com/in/osvaldodev) • [victordev8080@gmail.com](mailto:victordev8080@gmail.com)
+
+---
+
+> Este template é parte do ecossistema da Code Mind Tech e está pronto para ser usado em qualquer projeto backend profissional moderno.
+
